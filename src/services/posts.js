@@ -130,10 +130,10 @@ export async function newCommentFetch({postId , commentBody}) {
         },
       }
     );
-    console.log(response);
+    console.log(response.data.data.comment  ,"fuck");
     return response.data.data.comment;
   } catch (error) {
-    console.log(error);
+    console.log(error, "comment error");
   }
 }
 
