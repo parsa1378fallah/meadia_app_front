@@ -17,7 +17,7 @@ export const postsSlice = createSlice({
       );
     },
     addCommentToCurrentPost(state , action){
-      state.posts = state.posts.map((post)=>{
+      state.posts.map((post)=>{
         if(post._id === action.payload.postId){
           post.comments=[...post.comments , action.payload.comment];
           return {...post};

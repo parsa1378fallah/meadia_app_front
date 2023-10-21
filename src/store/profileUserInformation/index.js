@@ -37,9 +37,9 @@ export const userProfileSlice = createSlice({
       state.isFollowing = false;
     },
     addCommentToPtofilePosts(state, action) {
-      state.posts = state.posts.map((post) => {
+      state.posts.map((post) => {
         if (post._id === action.payload.postId) {
-          post.comments.push(action.payload.comment);
+          post.comments = [...post.comments, action.payload.comment];
           return { ...post };
         }
       });
