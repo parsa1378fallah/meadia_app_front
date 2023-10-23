@@ -19,6 +19,7 @@ import { addCommentToCurrentPost } from "../../store/posts/posts";
 import { useEffect } from "react";
 import FormTextArea from "../forms/FormTeaxArea.jsx";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
 const baseProfileUrl = import.meta.env.VITE_Image_Base_URL;
 export default function post({
   classes,
@@ -35,7 +36,8 @@ export default function post({
   const [postLikes, setPostLikes] = useState([]);
   const [isCommentsOpen, setIsCommetsopen] = useState(false);
   const [commentBody, setCommentBody] = useState();
-  const combinedClass = `flex flex-col my-4 shadow-lg p-4 ${classes}`;
+  const morvertDetailsElement = useRef(null);
+  const morevertDetailsIcon = useRef(null)
   const toggleShowMoreVert = () => {
     setShowMoreVert((current) => !current);
   };
@@ -55,7 +57,6 @@ export default function post({
     const data = await likePostFetch({ postId });
     if (data) {
       setPostLikes((current) => [userId, ...current]);
-      console.log(postLikes);
     }
   };
   const savePost = async () => {
@@ -71,15 +72,29 @@ export default function post({
       dispatch(addCommentToPtofilePosts({ postId, comment: data }));
     }
   };
+
   const refuseComment = () => {
     setCommentBody("");
     setIsCommetsopen(false);
   };
+
   useEffect(() => {
     setPostLikes(likes);
   }, []);
+
+  useEffect(() => {
+    const hidePostMorvert = (e) => {
+      if(!morvertDetailsElement.current || morevertDetailsIcon.current.contains(e.target)) return ; 
+      if (!morvertDetailsElement.current.contains(e.target))
+        setShowMoreVert(false);
+    };
+    document.addEventListener("click", hidePostMorvert, true);
+    return () => {
+      document.removeEventListener("click", hidePostMorvert, true);
+    };
+  }, []);
   return (
-    <div className={combinedClass}>
+    <div className={`flex flex-col my-4 shadow-lg p-4 ${classes}`}>
       <div className="flex flex-col justify-between gap-5 text-xs sm:text-base">
         <div className="flex justify-between">
           <div className="flex sm:flex-row flex-col items-start sm:items-center gap-3">
@@ -96,13 +111,14 @@ export default function post({
             <div
               onClick={toggleShowMoreVert}
               className="hover:bg-gray-100 p-1 rounded-full duration-150"
+              ref={morevertDetailsIcon}
             >
               <Icons iconName="MoreVert" />
             </div>
             {showMoreVert ? (
               <div
-                className="flex flex-col absolute w-32 bg-white top-full translate-x-1/2 rounded-lg shadow-xl overflow-hidden"
-                onClick={toggleShowMoreVert}
+                className=" flex flex-col absolute w-32 bg-white top-full translate-x-1/2 rounded-lg shadow-xl overflow-hidden"
+                ref={morvertDetailsElement}
               >
                 {userId !== author._id ? (
                   <div
@@ -165,55 +181,60 @@ export default function post({
           </motion.div>
         </div>
         <AnimatePresence>
-        {isCommentsOpen && (
-          <motion.div className="flex flex-col gap-3 overflow-hidden origin-top" initial={{height : 0}} animate={{height : isCommentsOpen ? "auto" : 0 }} exit={{height : 0}}>
-            <div className="flex flex-col gap-3">
-              <FormTextArea
-                title="کامنت بگذارید"
-                id="comment"
-                formValue={commentBody}
-                updateFormValue={setCommentBody}
-              />
-              <div className="flex gap-2 mr-auto">
-                <button
-                  className="px-3 py-2 bg-green-600 text-white rounded-lg"
-                  onClick={newComment}
-                >
-                  ثبت نظر
-                </button>
-                <button
-                  className="px-3 py-2 bg-red-600 text-white rounded-lg"
-                  onClick={refuseComment}
-                >
-                  انصراف
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2  p-5">
-              {comments.map((comment, index) => (
-                <div
-                  className="w-full p-3 bg-gray-200 rounded-lg flex flex-col gap-3"
-                  key={index}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
-                      <img
-                        className="w-full h-full"
-                        src={`${baseProfileUrl}${comment.profile}`}
-                      />
-                    </div>
-                    <p>
-                      {comment.firstName} {comment.lastName}
-                    </p>
-                  </div>
-                  <div className="p-2 bg-white rounded-md">
-                    <p>{comment.body}</p>
-                  </div>
+          {isCommentsOpen && (
+            <motion.div
+              className="flex flex-col gap-3 overflow-hidden origin-top"
+              initial={{ height: 0 }}
+              animate={{ height: isCommentsOpen ? "auto" : 0 }}
+              exit={{ height: 0 }}
+            >
+              <div className="flex flex-col gap-3">
+                <FormTextArea
+                  title="کامنت بگذارید"
+                  id="comment"
+                  formValue={commentBody}
+                  updateFormValue={setCommentBody}
+                />
+                <div className="flex gap-2 mr-auto">
+                  <button
+                    className="px-3 py-2 bg-green-600 text-white rounded-lg"
+                    onClick={newComment}
+                  >
+                    ثبت نظر
+                  </button>
+                  <button
+                    className="px-3 py-2 bg-red-600 text-white rounded-lg"
+                    onClick={refuseComment}
+                  >
+                    انصراف
+                  </button>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
+              </div>
+              <div className="flex flex-col gap-2  p-5">
+                {comments.map((comment, index) => (
+                  <div
+                    className="w-full p-3 bg-gray-200 rounded-lg flex flex-col gap-3"
+                    key={index}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full overflow-hidden">
+                        <img
+                          className="w-full h-full"
+                          src={`${baseProfileUrl}${comment.profile}`}
+                        />
+                      </div>
+                      <p>
+                        {comment.firstName} {comment.lastName}
+                      </p>
+                    </div>
+                    <div className="p-2 bg-white rounded-md">
+                      <p>{comment.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>

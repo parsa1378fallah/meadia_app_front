@@ -12,8 +12,8 @@ import {
   userIdStore,
   profileStore,
 } from "../../store/userInformation/userIngormation";
-import {open , close , isSidebarOpenStore} from "../../store/sidebar"
-import { useState } from "react";
+import { open, close, isSidebarOpenStore } from "../../store/sidebar";
+import { useState, useEffect , useRef } from "react";
 const baseProfileUrl = import.meta.env.VITE_Image_Base_URL;
 export default function topbar() {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export default function topbar() {
   const userName = useSelector(userNameStore);
   const [showProfileItems, setProfileItems] = useState(false);
   const profile = useSelector(profileStore);
-  
+  const profileItemsElement = useRef(null);
   const toggleshowProfileItems = () => {
     setProfileItems((current) => !current);
   };
@@ -29,20 +29,29 @@ export default function topbar() {
     localStorage.removeItem("social_medai_key");
     dispatch(denied());
   };
-  
-  const isSidebarOpen = useSelector(isSidebarOpenStore)
-  const opentSidebarInMobileSize = ()=>{
-    
-    isSidebarOpen ? dispatch(close()) : dispatch(open()); 
-  }
+
+  const isSidebarOpen = useSelector(isSidebarOpenStore);
+  const opentSidebarInMobileSize = () => {
+    isSidebarOpen ? dispatch(close()) : dispatch(open());
+  };
+  useEffect(()=>{
+    const hideProfileElements = (e)=>{
+      if(!profileItemsElement.current) return ; 
+      if(!profileItemsElement.current.contains(e.target))
+      {}
+    }
+  },[])
   return (
     <div className="topbar w-full h-14 bg-sky-700 flex justify-between items-center px-4 m-auto">
       <div className="topbarRight flex  gap-4 sm:gap-8 items-center">
         <span className="logo text-white text-ms md:text-xl  font-bold whitespace-nowrap hidden lg:flex">
           رسانه مجازی
         </span>
-        <span className="logo text-white text-ms md:text-xl  font-bold whitespace-nowrap flex lg:hidden" onClick={opentSidebarInMobileSize}>
-          <Icons iconName="Menu"  />
+        <span
+          className="logo text-white text-ms md:text-xl  font-bold whitespace-nowrap flex lg:hidden"
+          onClick={opentSidebarInMobileSize}
+        >
+          <Icons iconName="Menu" />
         </span>
         <div className="topbarLinks text-white flex gap-3  ">
           <span className="text-xs sm:text-sm">
@@ -80,10 +89,13 @@ export default function topbar() {
               <div
                 className="profileItems flex flex-col absolute w-32 bg-white top-full translate-x-2/3 translate-y-1  rounded-lg shadow-xl overflow-hidden z-50"
                 onClick={toggleshowProfileItems}
+                ref={profileItemsElement}
               >
                 <div
                   className="profileItem p-4 text-xs hover:bg-slate-100 duration-200"
-                 onClick={()=>{navigate('/dashboard')}}
+                  onClick={() => {
+                    navigate("/dashboard");
+                  }}
                 >
                   داشبورد
                 </div>

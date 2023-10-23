@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { searchbarFetch } from "../../services/search";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 const baseProfileUrl = import.meta.env.VITE_Image_Base_URL;
-export default function Searchbar({classes}) {
+export default function Searchbar({ classes }) {
   const navigate = useNavigate();
   const [searchbar, setSearchbar] = useState("");
   const [searchbarItems, setSearchbarItems] = useState([]);
   const [focus, setFocus] = useState(false);
+  const searchbarElement = useRef(null);
   const updateSearchBar = async () => {
     if (!searchbar) {
       setSearchbarItems([]);
@@ -19,10 +21,13 @@ export default function Searchbar({classes}) {
   const handleSearchbarItems = (userName) => {
     navigate(`/profile/${userName}`);
   };
-  document.addEventListener("click", (e) => {
-    if (!e.target.className.split(" ").includes("searchbar")) setFocus(false);
-    else setFocus(true)
-  });
+  useEffect(() => {
+    function calback(e) {
+      if (e.target === searchbarElement.current) setFocus(true);
+      else setFocus(false);
+    }
+    document.addEventListener("click", calback);
+  }, []);
   useEffect(() => {
     updateSearchBar();
   }, [searchbar]);
@@ -33,6 +38,7 @@ export default function Searchbar({classes}) {
         type="text"
         placeholder="جستجو در دوستان و پست ها و ویدئو ها ..."
         value={searchbar}
+        ref={searchbarElement}
         onChange={(e) => {
           setSearchbar(e.target.value);
         }}
