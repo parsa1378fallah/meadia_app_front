@@ -20,7 +20,6 @@ export default function Login() {
     e.preventDefault();
     const data = await loginFetch({ email, password });
     if (data) {
-      console.log(data)
       dispatch(access());
       dispatch(setUserInformation(data));
       notify(`کاربر ${firstName} ${lastName} با موفقیت وارد شدید`, "success");

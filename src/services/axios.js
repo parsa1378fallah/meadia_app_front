@@ -1,5 +1,6 @@
 import axios from "axios";
+const url = import.meta.env.VITE_Image_Base_URL;
 const instance = axios.create({
-  baseURL: "https://media-app-hie5.onrender.com/api/",
+  baseURL: `${url}api/`,
 });
 export default instance

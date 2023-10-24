@@ -67,7 +67,7 @@ export async function uploadProfileImageFetch({formData}){
   const token = localStorage.getItem("social_medai_key");
   try{
     const response = await axios.post(
-      "https://media-app-hie5.onrender.com/api/user/upload-profile-image",
+      "/user/upload-profile-image",
       formData,
       {
         headers: {
