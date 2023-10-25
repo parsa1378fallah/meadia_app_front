@@ -11,6 +11,7 @@ import {
   userNameProfileStore,
   userIdProfileStore,
 } from "../../store/profileUserInformation/index.js";
+import { AnimatePresence, motion } from "framer-motion";
 export default function feed({ classes }) {
   const posts = useSelector(postsStore);
 
@@ -39,31 +40,43 @@ export default function feed({ classes }) {
   return (
     <div className={`p-4 z-10 ${classes}`}>
       <Share icons={shareIcons} />
-      {userName
-        ? postsOfPerofile.map((item, index) => (
-            <div key={item._id}>
-              <Post
-                postId={item._id}
-                title={item.title}
-                description={item.description}
-                author={authorForProfile}
-                likes={item.likedBy}
-                comments={item.comments}
-              />
-            </div>
-          ))
-        : posts.map((item, index) => (
-            <div key={item._id}>
-              <Post
-                postId={item._id}
-                title={item.title}
-                description={item.description}
-                author={item.author}
-                likes={item.likedBy}
-                comments={item.comments}
-              />
-            </div>
-          ))}
+      <AnimatePresence>
+        {userName
+          ? postsOfPerofile.map((item, index) => (
+              <motion.div
+                key={item._id}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+              >
+                <Post
+                  postId={item._id}
+                  title={item.title}
+                  description={item.description}
+                  author={authorForProfile}
+                  likes={item.likedBy}
+                  comments={item.comments}
+                />
+              </motion.div>
+            ))
+          : posts.map((item, index) => (
+              <motion.div
+                key={item._id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, type: "easeInOut" }}
+                exit={{ opacity: 0 }}
+              >
+                <Post
+                  postId={item._id}
+                  title={item.title}
+                  description={item.description}
+                  author={item.author}
+                  likes={item.likedBy}
+                  comments={item.comments}
+                />
+              </motion.div>
+            ))}
+      </AnimatePresence>
     </div>
   );
 }

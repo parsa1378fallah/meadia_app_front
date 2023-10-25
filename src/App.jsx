@@ -11,12 +11,11 @@ import { Routes, Route } from "react-router-dom";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import GetLoginDataHook from "./hooks/getLoginData/GetLoginDataHook.jsx";
-import getPostsDataHook from "./hooks/getPostsData/GetPostsHook.jsx";
 import { useEffect, useState } from "react";
 
 function App() {
   GetLoginDataHook();
-  getPostsDataHook();
+  
   return (
     <div className="relative">
       <Routes>

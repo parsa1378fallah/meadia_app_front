@@ -44,9 +44,9 @@ export default function sidebar({ classes, items }) {
         )}
       </AnimatePresence>
       <div
-        className={` bg-slate-100 border overflow-y-scroll z-50 lg:z-0 scrollbar-hide shadow-lg  w-full relative top-0 right-0 hidden lg:flex ${classes}`}
+        className={` bg-slate-100 border overflow-y-scroll z-50 lg:z-0 scrollbar-hide shadow-lg  w-full h-screen relative hidden lg:flex ${classes}`}
       >
-        <div className="border   z-0 scrollbar-hide h-screen overflow-y-scroll sticky top-0 right-0 w-full">
+        <div className="border   z-0 scrollbar-hide  overflow-y-scroll sticky top-0 right-0 w-full">
           <SideBarItems items={items} />
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 mr-2 ">
             نمایش بیشتر
