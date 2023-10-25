@@ -44,6 +44,16 @@ export const userProfileSlice = createSlice({
         }
       });
     },
+    editCurrentInProfilePostStore(state , action){
+      state.posts.map((post)=>{
+        if(post._id === action.payload.postId)
+        {
+          post.title = action.payload.title ; 
+          post.description = action.payload.description;
+        }
+        return {...post};
+      })
+    }
   },
 });
 
@@ -54,6 +64,7 @@ export const {
   setUserProfileFollow,
   setUserProfileUnfollow,
   addCommentToPtofilePosts,
+  editCurrentInProfilePostStore
 } = userProfileSlice.actions;
 
 export const userNameProfileStore = (state) => state.userProfile.userName;

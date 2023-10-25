@@ -29,8 +29,6 @@ export default function feed({ classes }) {
   };
 
   const { userName } = useParams();
-
-  const combinedClass = `p-4 z-10 ${classes}`;
   const shareIcons = [
     { icon: "PermMedia", value: "خوراکی" },
     { icon: "Label", value: "گفتگو ها" },
@@ -39,7 +37,7 @@ export default function feed({ classes }) {
   ];
 
   return (
-    <div className={combinedClass}>
+    <div className={`p-4 z-10 ${classes}`}>
       <Share icons={shareIcons} />
       {userName
         ? postsOfPerofile.map((item, index) => (

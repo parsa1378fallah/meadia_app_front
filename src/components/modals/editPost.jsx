@@ -2,14 +2,14 @@ import FormInput from "../forms/FormInput";
 import FormTextArea from "../forms/FormTeaxArea";
 import { useImperativeHandle, useState } from "react";
 import { forwardRef } from "react";
-import { createPostFetch } from "../../services/posts";
+import { editPostFetch } from "../../services/posts";
 import { notify } from "../../plugins/toast/toast";
 import { useSelector, useDispatch } from "react-redux";
 import { userIdStore } from "../../store/userInformation/userIngormation";
-import { setNewPost } from "../../store/posts/posts.js";
-import { setUserProfilePostsWhenUserIsINProfilePage } from "../../store/profileUserInformation";
+import { editCurrentPostStore } from "../../store/posts/posts.js";
+import { editCurrentInProfilePostStore } from "../../store/profileUserInformation";
 import { motion, AnimatePresence } from "framer-motion";
-const Modal = forwardRef(function Modal(props, ref) {
+const Modal = forwardRef(function Modal({postTitle , postBody , postId}, ref) {
   useImperativeHandle(ref, () => {
     return {
       showModal,
@@ -18,22 +18,18 @@ const Modal = forwardRef(function Modal(props, ref) {
   const dispatch = useDispatch();
   const userId = useSelector(userIdStore);
   const [modalSituation, setModalSituation] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const createNewPost = async () => {
-    const post = await createPostFetch({ title, description, userId });
+  const [title, setTitle] = useState(postTitle);
+  const [description, setDescription] = useState(postBody);
+  const editCurrentPost = async () => {
+    const post = await editPostFetch({ title, description, postId });
     if (post) {
-      dispatch(setNewPost({ post }));
-      dispatch(setUserProfilePostsWhenUserIsINProfilePage({ post }));
-      notify("پست با موفقیت ساخته شد", "success");
+      dispatch(editCurrentPostStore({postId , title , description}))
+      dispatch(editCurrentInProfilePostStore({postId , title , description}))
+      notify("پست با موفقیت ویرایش شد شد", "success");
     }
-    setTitle("");
-    setDescription("");
     setModalSituation(false);
   };
-  const refuseCreateNewPost = () => {
-    setTitle("");
-    setDescription("");
+  const refuseEditNewPost = () => {
     setModalSituation(false);
   };
   const showModal = () => {
@@ -51,7 +47,7 @@ const Modal = forwardRef(function Modal(props, ref) {
           >
             <div
               className="overlay fixed top-0 left-0 w-full h-full bg-slate-500 opacity-80"
-              onClick={refuseCreateNewPost}
+              onClick={refuseEditNewPost}
             ></div>
             <motion.div
               initial={{ y: "-100vh" }}
@@ -80,14 +76,14 @@ const Modal = forwardRef(function Modal(props, ref) {
               />
               <div className="buttons flex gap-4">
                 <button
-                  className="bg-green-500 py-2 px-4 rounded-lg text-white"
-                  onClick={createNewPost}
+                  className="bg-blue-500 py-2 px-4 rounded-lg text-white"
+                  onClick={editCurrentPost}
                 >
-                  ارسال
+                  ویرایش
                 </button>
                 <button
                   className="bg-red-500  py-2 px-4 rounded-lg text-white"
-                  onClick={refuseCreateNewPost}
+                  onClick={refuseEditNewPost}
                 >
                   انصراف
                 </button>

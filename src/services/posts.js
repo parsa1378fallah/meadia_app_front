@@ -118,7 +118,6 @@ export async function getSavedPostsFetch() {
 
 export async function newCommentFetch({postId , commentBody}) {
   const token = localStorage.getItem("social_medai_key");
-  console.log(commentBody)
   try {
     const response = await axios.post(
       `/posts/comment`,
@@ -130,8 +129,26 @@ export async function newCommentFetch({postId , commentBody}) {
         },
       }
     );
-    console.log(response.data.data.comment  ,"fuck");
     return response.data.data.comment;
+  } catch (error) {
+    console.log(error, "comment error");
+  }
+}
+
+export async function editPostFetch({postId , title , description}) {
+  const token = localStorage.getItem("social_medai_key");
+  try {
+    const response = await axios.put(
+      `posts/${postId}`,
+      {postId , title , description},
+      {
+        headers: {
+          "x-auth-token": token,
+          "content-type": "application/json",
+        },
+      }
+    );
+    return response.data.data.post;
   } catch (error) {
     console.log(error, "comment error");
   }

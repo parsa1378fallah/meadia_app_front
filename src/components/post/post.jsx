@@ -1,5 +1,5 @@
 import Icons from "../icons/Icons";
-import { useState } from "react";
+import { useState , useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   deletePostFetch,
@@ -19,7 +19,8 @@ import { addCommentToCurrentPost } from "../../store/posts/posts";
 import { useEffect } from "react";
 import FormTextArea from "../forms/FormTeaxArea.jsx";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRef } from "react";
+import EditPostModal from "../modals/editPost.jsx"
+
 const baseProfileUrl = import.meta.env.VITE_Image_Base_URL;
 export default function post({
   classes,
@@ -37,7 +38,8 @@ export default function post({
   const [isCommentsOpen, setIsCommetsopen] = useState(false);
   const [commentBody, setCommentBody] = useState();
   const morvertDetailsElement = useRef(null);
-  const morevertDetailsIcon = useRef(null)
+  const morevertDetailsIcon = useRef(null) ; 
+  const editPostModal = useRef(null) ; 
   const toggleShowMoreVert = () => {
     setShowMoreVert((current) => !current);
   };
@@ -77,7 +79,9 @@ export default function post({
     setCommentBody("");
     setIsCommetsopen(false);
   };
-
+  const openEditPostModal = ()=>{
+    editPostModal.current.showModal();
+  }
   useEffect(() => {
     setPostLikes(likes);
   }, []);
@@ -134,7 +138,7 @@ export default function post({
                   </div>
                 ) : null}
                 {userId === author._id ? (
-                  <div className="postItem p-4 text-xs hover:bg-slate-100 duration-200">
+                  <div className="postItem p-4 text-xs hover:bg-slate-100 duration-200" onClick={openEditPostModal}>
                     ویرایش
                   </div>
                 ) : null}
@@ -237,6 +241,7 @@ export default function post({
           )}
         </AnimatePresence>
       </div>
+      <EditPostModal postId={postId} postTitle={title} postBody={description} ref={editPostModal}/>
     </div>
   );
 }

@@ -24,11 +24,21 @@ export const postsSlice = createSlice({
         }
         
       })
+    },
+    editCurrentPostStore(state , action){
+      state.posts.map((post)=>{
+        if(post._id === action.payload.postId)
+        {
+          post.title = action.payload.title ; 
+          post.description = action.payload.description;
+        }
+        return {...post};
+      })
     }
   },
 });
 
-export const { setPosts, setNewPost, deletePostStore , addCommentToCurrentPost } = postsSlice.actions;
+export const { setPosts, setNewPost, deletePostStore , addCommentToCurrentPost , editCurrentPostStore } = postsSlice.actions;
 
 export const postsStore = (state) => state.posts.posts;
 
