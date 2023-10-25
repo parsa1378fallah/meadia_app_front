@@ -16,18 +16,16 @@ export default function Login() {
   const navigate = useNavigate();
   async function registerUser(e) {
     e.preventDefault();
-    const success = await register({
+    const data = await register({
       firstName,
       lastName,
       userName,
       password,
       email,
     });
-    if (success) {
+    if (data) {
       notify("ثبت نام با موفقیت انجام شد", "success");
       navigate("/login");
-    } else {
-      notify("عملیات با مشکل رو به رو شد", "error");
     }
   }
   return (

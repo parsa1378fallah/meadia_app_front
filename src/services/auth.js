@@ -1,4 +1,5 @@
 import axios from "./axios";
+import { notifyGroup, notify } from "../plugins/toast/toast";
 export async function register({
   email = "",
   password = "",
@@ -17,7 +18,9 @@ export async function register({
     console.log("response :", response);
     return true;
   } catch (error) {
-    return false;
+    const erorrGroup = error.response.data.data;
+    notify("عملیات با مشکل رو به رو شد", "error");
+    notifyGroup(erorrGroup, "error");
   }
 }
 export async function loginFetch({ email = "", password = "" }) {
@@ -28,6 +31,9 @@ export async function loginFetch({ email = "", password = "" }) {
     localStorage.setItem("social_medai_key", token);
     return response.data.data;
   } catch (error) {
+    const erorrGroup = error.response.data.data;
+    notify("عملیات با مشکل رو به رو شد", "error");
+    notifyGroup(erorrGroup, "error");
     return false;
   }
 }

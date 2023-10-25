@@ -16,6 +16,8 @@ function getLoginDataHook() {
     }
   }
   useEffect(() => {
+    const token = localStorage.getItem("social_medai_key");
+    if(token)
     getLoginData();
   }, []);
   return getLoginData;

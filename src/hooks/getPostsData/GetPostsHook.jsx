@@ -12,6 +12,8 @@ function getPostsDataHook() {
     }
   }
   useEffect(() => {
+    const token = localStorage.getItem("social_medai_key");
+    if(token)
     getPosts();
   }, []);
   return getPosts;

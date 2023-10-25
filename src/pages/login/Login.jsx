@@ -26,7 +26,6 @@ export default function Login() {
       navigate("/");
     } else {
       dispatch(denied());
-      notify("متاسفانه عملیات با مشکل روبه رو شد", "error");
     }
   }
   return (
