@@ -1,38 +1,42 @@
-import Home from "./pages/home/Home.jsx";
-import Profile from "./pages/profile/Profile.jsx";
-import Login from "./pages/login/Login.jsx";
-import Register from "./pages/register/Register.jsx";
-import MainLayout from "./layouts/main/MainLayout.jsx";
-import Dashboard from "./pages/dashboard/Dashboard.jsx";
-import Posts from "./pages/posts/posts.jsx"
-import ProtectedAuthRoutes from "./protectedRoutes/protectedAuthRoutes"
-import ProtectedMainRoutes from "./protectedRoutes/protectedMainRoutes.jsx";
+import { Suspense, lazy } from "react";
+const Home = lazy(() => import("./pages/home/Home.jsx"));
+const Profile = lazy(() => import("./pages/profile/Profile.jsx"));
+const Login = lazy(() => import("./pages/login/Login.jsx"));
+const Register = lazy(() => import("./pages/register/Register.jsx"));
+const MainLayout = lazy(() => import("./layouts/main/MainLayout.jsx"));
+const Dashboard = lazy(() => import("./pages/dashboard/Dashboard.jsx"));
+const Posts = lazy(() => import("./pages/posts/posts.jsx"));
+const ProtectedAuthRoutes = lazy(() =>
+  import("./protectedRoutes/protectedAuthRoutes")
+);
+const ProtectedMainRoutes = lazy(() =>
+  import("./protectedRoutes/protectedMainRoutes.jsx")
+);
 import { Routes, Route } from "react-router-dom";
-import React from "react";
 import { ToastContainer } from "react-toastify";
 import GetLoginDataHook from "./hooks/getLoginData/GetLoginDataHook.jsx";
-import { useEffect, useState } from "react";
-
+import Loading from "./components/loading/loading.jsx";
 function App() {
   GetLoginDataHook();
-  
   return (
     <div className="relative">
-      <Routes>
-        <Route element={<ProtectedMainRoutes />}>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path="profile/:userName" element={<Profile />} />
-            <Route path="posts" element={<Posts />} />
-            <Route path="dashboard" element={<Dashboard />} />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route element={<ProtectedMainRoutes />}>
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path="profile/:userName" element={<Profile />} />
+              <Route path="posts" element={<Posts />} />
+              <Route path="dashboard" element={<Dashboard />} />
+            </Route>
           </Route>
-        </Route>
-        <Route element={<ProtectedAuthRoutes />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </Route>
-      </Routes>
-      <ToastContainer />
+          <Route element={<ProtectedAuthRoutes />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+        </Routes>
+        <ToastContainer />
+      </Suspense>
     </div>
   );
 }
