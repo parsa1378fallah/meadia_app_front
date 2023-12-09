@@ -6,7 +6,7 @@ import { notify } from "../../plugins/toast/toast";
 import { Link } from "react-router-dom";
 import { isUserLogin } from "../../store/login/login.js";
 import { useSelector } from "react-redux";
-export default function Login() {
+export default function Register() {
   const isUserLoginStore = useSelector(isUserLogin);
   const [email, updateEmail] = useState("");
   const [password, updatePassword] = useState("");
