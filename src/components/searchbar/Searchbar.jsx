@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { searchbarFetch } from "../../services/search";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 const baseProfileUrl = import.meta.env.VITE_Image_Base_URL;
 export default function Searchbar({ classes }) {
   const navigate = useNavigate();
@@ -43,30 +44,35 @@ export default function Searchbar({ classes }) {
           setSearchbar(e.target.value);
         }}
       />
-      {searchbarItems && focus ? (
-        <div className="absolute top-full w-full bg-white z-50 ">
-          {searchbarItems.map((item, index) => (
-            <div
-              key={index}
-              className="w-full h-10 flex items-center px-4 py-3 border gap-4 cursor-pointer"
-              onClick={() => {
-                handleSearchbarItems(item.userName);
-              }}
-            >
-              <div>
-                <img
-                  src={`${baseProfileUrl}${item.profile}`}
-                  className="h-8 w-8 rounded-full"
-                />
+      <AnimatePresence>
+        {searchbarItems && focus ? (
+          <motion.div
+            className="absolute top-full w-full bg-white z-50 "
+            
+          >
+            {searchbarItems.map((item, index) => (
+              <div
+                key={index}
+                className="w-full h-10 flex items-center px-4 py-3 border gap-4 cursor-pointer"
+                onClick={() => {
+                  handleSearchbarItems(item.userName);
+                }}
+              >
+                <div>
+                  <img
+                    src={`${baseProfileUrl}${item.profile}`}
+                    className="h-8 w-8 rounded-full"
+                  />
+                </div>
+                <div className="flex gap-1">
+                  <p>{item.firstName}</p>
+                  <p>{item.lastName}</p>
+                </div>
               </div>
-              <div className="flex gap-1">
-                <p>{item.firstName}</p>
-                <p>{item.lastName}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
+            ))}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
