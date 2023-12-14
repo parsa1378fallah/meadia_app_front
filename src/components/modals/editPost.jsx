@@ -9,7 +9,7 @@ import { userIdStore } from "../../store/userInformation/userIngormation";
 import { editCurrentPostStore } from "../../store/posts/posts.js";
 import { editCurrentInProfilePostStore } from "../../store/profileUserInformation";
 import { motion, AnimatePresence } from "framer-motion";
-const Modal = forwardRef(function Modal({postTitle , postBody , postId}, ref) {
+const Modal = forwardRef(function Modal({ postTitle, postBody, postId }, ref) {
   useImperativeHandle(ref, () => {
     return {
       showModal,
@@ -23,9 +23,9 @@ const Modal = forwardRef(function Modal({postTitle , postBody , postId}, ref) {
   const editCurrentPost = async () => {
     const post = await editPostFetch({ title, description, postId });
     if (post) {
-      dispatch(editCurrentPostStore({postId , title , description}))
-      dispatch(editCurrentInProfilePostStore({postId , title , description}))
-      notify("پست با موفقیت ویرایش شد شد", "success");
+      dispatch(editCurrentPostStore({ postId, title, description }));
+      dispatch(editCurrentInProfilePostStore({ postId, title, description }));
+      notify("پست با موفقیت ویرایش  شد", "success");
     }
     setModalSituation(false);
   };
@@ -58,7 +58,7 @@ const Modal = forwardRef(function Modal({postTitle , postBody , postId}, ref) {
                 damping: 25,
                 stiffness: 500,
               }}
-              exit={{ y: "100vh"}}
+              exit={{ y: "100vh" }}
               className="w-5/6 sm:w-1/2 p-10 bg-white rounded-lg flex flex-col gap-4"
             >
               <h1 className=" text-lg">پست جدید</h1>

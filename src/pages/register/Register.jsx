@@ -6,6 +6,7 @@ import { notify } from "../../plugins/toast/toast";
 import { Link } from "react-router-dom";
 import { isUserLogin } from "../../store/login/login.js";
 import { useSelector } from "react-redux";
+import Loading from "../../components/loading/loading";
 export default function Register() {
   const isUserLoginStore = useSelector(isUserLogin);
   const [email, updateEmail] = useState("");
@@ -13,9 +14,11 @@ export default function Register() {
   const [firstName, updateFirstName] = useState("");
   const [lastName, updateLastName] = useState("");
   const [userName, updateUserName] = useState("");
+  const [isRegisterDataLoading, setIsRegisterDataLoading] = useState(false);
   const navigate = useNavigate();
   async function registerUser(e) {
     e.preventDefault();
+    setIsRegisterDataLoading(true);
     const data = await register({
       firstName,
       lastName,
@@ -27,6 +30,7 @@ export default function Register() {
       notify("ثبت نام با موفقیت انجام شد", "success");
       navigate("/login");
     }
+    setIsRegisterDataLoading(false);
   }
   return (
     <div className="grid grid-cols-12 justify-center  items-center py-4 bg-slate-200 h-screen sm:h-full">
@@ -88,7 +92,11 @@ export default function Register() {
                 onClick={registerUser}
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                ثبت نام
+                {isRegisterDataLoading ? (
+                  <Loading type="loading" size={20} color={"#ffffff"} />
+                ) : (
+                  "ورود"
+                )}
               </button>
               <div className="text-sm font-light text-gray-500 dark:text-gray-400 flex justify-between items-center">
                 <p>قبلا ثبت نام کرده اید ؟</p>

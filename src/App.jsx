@@ -20,7 +20,16 @@ function App() {
   GetLoginDataHook();
   return (
     <div className="relative">
-      <Suspense fallback={<Loading />}>
+      <Suspense
+        fallback={
+          <Loading
+            type="loading"
+            size={150}
+            color={"#455689"}
+            classes={"w-full h-screen flex items-center justify-center"}
+          />
+        }
+      >
         <Routes>
           <Route element={<ProtectedMainRoutes />}>
             <Route path="/" element={<MainLayout />}>

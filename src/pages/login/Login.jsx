@@ -8,16 +8,18 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { access, denied } from "../../store/login/login.js";
 import { setUserInformation } from "../../store/userInformation/userIngormation";
-
+import Loading from "../../components/loading/loading.jsx";
 export default function Login() {
   const dispatch = useDispatch();
   const [email, updateEmail] = useState("");
   const [password, updatePassword] = useState("");
   const [rememberMe, updateRemeberme] = useState(false);
+  const [isLoadingLoginData, setIsLoadingLoginData] = useState(false);
   const navigate = useNavigate();
 
   async function loginUser(e) {
     e.preventDefault();
+    setIsLoadingLoginData(true);
     const data = await loginFetch({ email, password });
     if (data) {
       dispatch(access());
@@ -27,6 +29,7 @@ export default function Login() {
     } else {
       dispatch(denied());
     }
+    setIsLoadingLoginData(false);
   }
   return (
     <div className="grid grid-cols-12  justify-center  items-center py-4 bg-slate-200 h-screen sm:h-full">
@@ -64,7 +67,11 @@ export default function Login() {
                 onClick={loginUser}
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                ورود
+                {isLoadingLoginData ? (
+                  <Loading type="loading" size={20} color={"#ffffff"} />
+                ) : (
+                  "ورود"
+                )}
               </button>
               <div className="flex justify-between items-center">
                 <div>

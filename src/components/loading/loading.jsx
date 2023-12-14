@@ -1,11 +1,11 @@
 import ClipLoader from "react-spinners/ClipLoader";
-const loading = () => {
+const loading = ({ type, size, color, classes }) => {
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className={classes}>
       <ClipLoader
-        color={"#123123"}
-        loading={loading}
-        size={150}
+        color={color}
+        loading={type}
+        size={size}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
